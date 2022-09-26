@@ -1,0 +1,1366 @@
+Python Project to Scrape YouTube using YouTube Data API | Analyze and Visualize YouTube data
+techTFQ
+Link:
+https://www.youtube.com/watch?v=SwSbnmqk3zY&list=PLavw5C92dz9HwT_uStsDdJbuBOt_XD0ch&index=1&t=150s
+
+
+-- (0:00) Ideja: Python kod za pristup YT preko yt data API-ja, kojim cemo ekstraktovati podatke sa yt-ba.
+Zatim cemo te podatke ucitati u pandas DF, analizirati ih i napraviti neke vizualizacije koristeci seaborn Python biblioteku
+
+
+1. Generisanje API kljuca (1:19)
+-------------------------------------
+-- U Googleu potrazimo Google Developer Console:
+https://console.cloud.google.com/apis/dashboard?pli=1&project=roki-1560496923580
+
+Preduslov je da imamo kreiran Google Account.
+Moj je:
+
+Username = roljingstones@yandex.com
+Password = Dashano2012*
+
+Idemo na Create Project: Desno od Google Cloud pise moj username, kliknem na to i otvoti mi se prozor u kojem imam opciju da kreiram novi projekat.
+Imenujem projekt: Roki YT Analysis Project  (Project ID: roki-yt-analysis-project)
+Idem na Create
+Nakon sto se kreira projekat idemo na ENABLE APIS AND SERVICES
+Skrolujemo dolje dok ne pronadjemo YouTube Data API v3, kliknemo na to.
+Klik na Enable da ga omogucimo.
+Sad treba da kreiramo kljuc. Idemo na Credentials: Onda idemo gore na CREATE CREDENTIALS, onda klik na API key.
+Izadje prozor u kojem je zapisan kljuc, kopiram ga>
+AIzaSyD-3rsz-vXjiD4-7swTjivx198ItGD1MK0
+
+
+
+
+2. YouTube API dokumentacija (3:27)
+-----------------------------------
+- Kako se koristi ovaj API?
+
+Dokumentaciju potrazimo kucajuci u Googleu: youtube data api
+https://developers.google.com/youtube/v3
+
+Kad se sajt otvori idemo na Reference.
+Ako npr. zelim da vidim kako bih vidio statistiku nekih yt kanala, idem na Channels-->list, tu se sad vidi kako se koriste te Python metode
+Objasnjava kako radi Try this API. Odaberemo Python i imamo gotov Python kod koji mozemo koristiti u svojim projektima.
+Onda objasnjava part parametar...
+Sad idemo na Guides karticu:
+Idemo Quickstart pa Python:
+trebamo instalisati google api python client
+Takodje pregledavamo i Qouta costs for API requests: to je koliko bodova nas kosta svaki request
+
+3. Preduslovi:(7:48)
+-Kreiranje virtualne okoline
+-Instalacija paketa
+-----------------------------------
+--Pokrecem Anaconda prompt
+-- Kreiracemo novu virtualnu okolinu:
+O tome kako se kreira nova virtuelna okolina, imamo na linkovima:
+https://www.geeksforgeeks.org/set-up-virtual-environment-for-python-using-anaconda/
+
+https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html?highlight=create%20environment#creating-an-environment-with-commands
+
+Otvorim Anaconda prompt:
+(base) C:\Users\sinisa.roljic>
+Kucam:
+--Provjera da vidim da li je conda instalisana na ovoj putanji:
+
+(base) C:\Users\sinisa.roljic> conda -V
+
+Output:
+conda 4.11.0
+
+dakle jeste.
+--Update conda okoline:
+
+(base) C:\Users\sinisa.roljic> conda update conda
+
+(ovdje krene update conde i svih mogucih paketa, traje dugo)
+
+--Provjeravamo koje sve verzije Pythona imam instalisane:
+
+(base) C:\Users\sinisa.roljic>conda search "^python$"
+Rezultat:
+imam veliki broj instalisanih verzija pythona, posljednja je:
+python                        3.10.4      hbb2ffb3_0  pkgs/main
+
+--Sad kreiramo virtualnu okolinu:
+
+(base) C:\Users\sinisa.roljic> conda create -n YT-env python=3.10.4
+
+Rezultat:
+Kreira se ova okolina i instalisu se potrebni paketi.
+Nakon toga se ispise:
+
+To activate this environment, use
+#
+#     $ conda activate YT-env
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+Zatim cemo aktivirati ovu okolinu:
+
+(base) C:\Users\sinisa.roljic>conda activate YT-env
+
+(YT-env) C:\Users\sinisa.roljic>
+
+(vidimo da se okolina iz base promijenila na nasu novokreiranu okolinu).
+
+--Sad instalisemo potrebne pakete (8:33):
+
+--Prvo instalisemo Google API paket:
+
+(YT-env) C:\Users\sinisa.roljic>conda install google-api-python-client
+
+Ovo ne prolazi! Javi gresku:
+PackagesNotFoundError: The following packages are not available from current channels:
+
+  - google-api-python-client
+Medjutim, ovo se slicno desavalo i kad sam radio sa studentima, pa sam na linku:
+
+ImportError: No module named googleapiclient.discovery
+https://stackoverflow.com/questions/43010073/importerror-no-module-named-googleapiclient-discovery
+
+pronasao rjesenje:
+
+If your a Windows User and have Python Installed, then use the following command:
+
+python -m pip install --upgrade google-api-python-client
+
+
+Dakle, kucam:
+
+(YT-env) C:\Users\sinisa.roljic>python -m pip install --upgrade google-api-python-client
+
+i onda se sve fino instalise.
+
+--Sad instalisemo pandas:
+
+(YT-env) C:\Users\sinisa.roljic>conda install pandas
+
+--Sad instalisemo seaborn:
+
+(YT-env) C:\Users\sinisa.roljic> conda install seaborn
+Rezultat:
+(ovo se malo duze instalise)
+
+--Instalisemo jupyter:
+
+(YT-env) C:\Users\sinisa.roljic>conda install jupyter
+
+Rezultat:
+Instalise se jupyter i svi paketi vezani uz to.
+
+--Sad se pozicioniramo u folder iz kojeg zelimo da pokrenemo JN:
+
+(YT-env) C:\Users\sinisa.roljic\Desktop\Project>
+
+--Sad odatle pokrecemo JN:
+
+(YT-env) C:\Users\sinisa.roljic\Desktop\Project> jupyter notebook
+
+Rezultat:
+Otvara se JN.
+
+--Kreiram novi Python notebook u JN.
+
+Reimenujemo notebook u : YT-Analysis-project
+
+--(9:45) Part-1: Scrape, Analyze&Visualize Channel Statistics
+--------------------------------------------------------------
+--Radimo u JN:
+
+--Import potrebnih modula:
+
+from googleapiclient.discovery import build
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+Kad pokrenem celiju javlja warning:
+
+C:\Users\sinisa.roljic\AppData\Local\Continuum\anaconda3\envs\YT-env\lib\site-packages\scipy\__init__.py:146: UserWarning: A NumPy version >=1.16.5 and <1.23.0 is required for this version of SciPy (detected version 1.23.1
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+Matplotlib is building the font cache; this may take a moment.
+
+ali mislim da je to ok.
+
+--Rad ce biti podijeljen u dva dijela:
+1. dio: Ekstrahovacemo podatke iz nekih YT kanala i onda cemo uporediti podatke za tih nekoliko YT kanala
+2.dio: Izdvojcemo sve podatke za videe iz odredjenih kanala i onda cemo te podatke vizualizovati
+
+--Izdvajanje detalja o kanalima:
+Prvo nam treba varijabla u kojoj cemo sacuvati nas API kljuc:
+
+api_key = 'AIzaSyD-3rsz-vXjiD4-7swTjivx198ItGD1MK0'
+
+--Zatim cemo pristupiti odredjenom kanalu da vidimo kako se to radi:
+Kako doci do YT ID nekog kanala?
+Potrazio sam na Googleu i nasao neki stackoverfolow link:
+
+Yt kanal id, kako naci:
+
+ 
+
+https://stackoverflow.com/questions/14366648/how-can-i-get-a-channel-id-from-youtube#
+
+ 
+Npr.
+Agelast yt kanal:
+
+ 
+
+https://www.youtube.com/channel/UCxunmKtYfMYjnf6Mp4eWBxg
+
+ 
+
+channel id = UCxunmKtYfMYjnf6Mp4eWBxg
+
+(Teufik ima svoj kanal, a ja cu potraziti za ovaj Galebov kanal).
+
+channel_id = 'UCxunmKtYfMYjnf6Mp4eWBxg'
+
+--Dalje, treba nam YT servis:
+Tu se sad vracamo na onu YT Data API dokumentaciju:
+Idemo na toj stranici na Reference --> Channels --> list, zatim potrazimo primjer koda:
+pod Common use cases na list(by Channel ID), klik na : </>
+biramo Python kao jezik: 
+Iskopiracu ovdje komplet primjer:
+
+###################
+# -*- coding: utf-8 -*-
+
+# Sample Python code for youtube.channels.list
+# See instructions for running these code samples locally:
+# https://developers.google.com/explorer-help/code-samples#python
+
+import os
+
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
+import googleapiclient.errors
+
+scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
+
+def main():
+    # Disable OAuthlib's HTTPS verification when running locally.
+    # *DO NOT* leave this option enabled in production.
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+    api_service_name = "youtube"
+    api_version = "v3"
+    client_secrets_file = "YOUR_CLIENT_SECRET_FILE.json"
+
+    # Get credentials and create an API client
+    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+        client_secrets_file, scopes)
+    credentials = flow.run_console()
+    youtube = googleapiclient.discovery.build(
+        api_service_name, api_version, credentials=credentials)
+
+    request = youtube.channels().list(
+        part="snippet,contentDetails,statistics",
+        id="UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    )
+    response = request.execute()
+
+    print(response)
+
+if __name__ == "__main__":
+    main()
+#############################
+
+Ovaj dio nam treba iz gornjeg koda:
+
+api_service_name = "youtube"
+    api_version = "v3"
+
+youtube = googleapiclient.discovery.build(
+        api_service_name, api_version, credentials=credentials)
+		
+...
+request = youtube.channels().list(
+        part="snippet,contentDetails,statistics",
+        id="UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    )
+    response = request.execute()
+
+    print(response)
+	....
+	
+--------------------
+--Vracamo se u onu istu JN celiju i kucamo:
+
+youtube = build('youtube', 'v3', developerKey = api_key)
+
+Pokrenemo run celije i sve je ok.
+
+--Ekstrakcija detalja iz kanala
+
+--Kreiracemo f-ju koja ce izdvajati detalje iz kanala:
+
+##F-ja koja nam daje statistiku kanala   (ovo stavimo da je markdown)
+
+def get_channel_stats(youtube,channel_id):
+    #dio koda za podizanje zahtjeva, vidi onaj kopirani kod iz doc.
+	request = youtube.channels().list(part='snippet,contentDetails,statistics', id = channel_id)
+	#da bismo pokrenuli ovaj request:
+	response = request.execute()
+	#kao izlaz vracamo response
+	return response
+	
+--Provjeravamo da li f-ja radi:
+
+get_channel_stats(youtube,channel_id)
+
+--sve ok, prikazu se podaci tipa rjecnik
+
+#dakle, dobili smo podatak tipa rjecnik i sad je samo tehnika da dodjemo do podataka koji nam trebaju
+
+Mozemo jasnije pregledati podatke ako ih prekopiramo u prozor na stranici:
+https://codebeautify.org/python-formatter-beautifier
+
+tamo pasteam taj rjecnik da bih jasnije vidio kako je strukturisan:
+i evo ga u cijelosti:
+
+{
+    "kind": "youtube#channelListResponse",
+    "etag": "WN1uYnj1QuADlcZ4kfyuqiLRhbs",
+    "pageInfo": {"totalResults": 1, "resultsPerPage": 5},
+    "items": [
+        {
+            "kind": "youtube#channel",
+            "etag": "amAXnU85mJJO-jXzlr-l5E90Tsc",
+            "id": "UCxunmKtYfMYjnf6Mp4eWBxg",
+            "snippet": {
+                "title": "Agelast",
+                "description": "Najstarija priča na svetu je mit o potrazi. Čovek otkako postoji, on traga. Traganje može da bude prostorno, ali traganje može da bude i unutrašnje. Tragamo za srećom, za identitetom, tragamo pokušavajući da odgovorimo na mnoga pitanja. Kroz razgovore i putovanja, ovo je moja potraga, moj pokušaj da pobegnem od besmisla.\n\nAgelast podcast je projekat Galeba Nikačevića.",
+                "publishedAt": "2019-11-28T14:32:52.880601Z",
+                "thumbnails": {
+                    "default": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu-EvVtN56f_bg0Z9kfEaO3YQFacRMiHNuiYDnCs=s88-c-k-c0x00ffffff-no-rj",
+                        "width": 88,
+                        "height": 88,
+                    },
+                    "medium": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu-EvVtN56f_bg0Z9kfEaO3YQFacRMiHNuiYDnCs=s240-c-k-c0x00ffffff-no-rj",
+                        "width": 240,
+                        "height": 240,
+                    },
+                    "high": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu-EvVtN56f_bg0Z9kfEaO3YQFacRMiHNuiYDnCs=s800-c-k-c0x00ffffff-no-rj",
+                        "width": 800,
+                        "height": 800,
+                    },
+                },
+                "localized": {
+                    "title": "Agelast",
+                    "description": "Najstarija priča na svetu je mit o potrazi. Čovek otkako postoji, on traga. Traganje može da bude prostorno, ali traganje može da bude i unutrašnje. Tragamo za srećom, za identitetom, tragamo pokušavajući da odgovorimo na mnoga pitanja. Kroz razgovore i putovanja, ovo je moja potraga, moj pokušaj da pobegnem od besmisla.\n\nAgelast podcast je projekat Galeba Nikačevića.",
+                },
+                "country": "RS",
+            },
+            "contentDetails": {
+                "relatedPlaylists": {"likes": "", "uploads": "UUxunmKtYfMYjnf6Mp4eWBxg"}
+            },
+            "statistics": {
+                "viewCount": "26265876",
+                "subscriberCount": "133000",
+                "hiddenSubscriberCount": False,
+                "videoCount": "398",
+            },
+        }
+    ],
+}
+
+
+--vidimo da se radi o rjecniku sa nekoliko key-value parova. Jedan od njih je "items":[...], tu je value u stvari lista ciji
+je jedini element u stvari rjecnik. U tom rjecniku mi treba da dodjemo do dva key-value para:
+Prvi je "snippet":{...} odakle nam treba naziv kanala,
+a drugi je:
+
+ "statistics":{...}.
+Vidimo da je value za taj kljuc opet rjecnik i nama trebaju podaci:
+"viewCount": "26265876",
+                "subscriberCount": "133000",
+                "hiddenSubscriberCount": False,
+                "videoCount": "398"
+				
+
+--(da bih lakse raspakivao ovaj rjecnik, otvorio sam drugu JN kodnu stranicu i u varijablu rjecnik upisao ovaj rjecnik)
+
+rjecnik = {'kind': 'youtube#channelListResponse',
+ 'etag': 'WN1uYnj1QuADlcZ4kfyuqiLRhbs',
+ 'pageInfo': {'totalResults': 1, 'resultsPerPage': 5},
+ 'items': [{'kind': 'youtube#channel',
+   'etag': 'amAXnU85mJJO-jXzlr-l5E90Tsc',
+   'id': 'UCxunmKtYfMYjnf6Mp4eWBxg',
+   'snippet': {'title': 'Agelast',
+    'description': 'Najstarija priča na svetu je mit o potrazi. Čovek otkako postoji, on traga. Traganje može da bude prostorno, ali traganje može da bude i unutrašnje. Tragamo za srećom, za identitetom, tragamo pokušavajući da odgovorimo na mnoga pitanja. Kroz razgovore i putovanja, ovo je moja potraga, moj pokušaj da pobegnem od besmisla.\n\nAgelast podcast je projekat Galeba Nikačevića.',
+    'publishedAt': '2019-11-28T14:32:52.880601Z',
+    'thumbnails': {'default': {'url': 'https://yt3.ggpht.com/ytc/AMLnZu-EvVtN56f_bg0Z9kfEaO3YQFacRMiHNuiYDnCs=s88-c-k-c0x00ffffff-no-rj',
+      'width': 88,
+      'height': 88},
+     'medium': {'url': 'https://yt3.ggpht.com/ytc/AMLnZu-EvVtN56f_bg0Z9kfEaO3YQFacRMiHNuiYDnCs=s240-c-k-c0x00ffffff-no-rj',
+      'width': 240,
+      'height': 240},
+     'high': {'url': 'https://yt3.ggpht.com/ytc/AMLnZu-EvVtN56f_bg0Z9kfEaO3YQFacRMiHNuiYDnCs=s800-c-k-c0x00ffffff-no-rj',
+      'width': 800,
+      'height': 800}},
+    'localized': {'title': 'Agelast',
+     'description': 'Najstarija priča na svetu je mit o potrazi. Čovek otkako postoji, on traga. Traganje može da bude prostorno, ali traganje može da bude i unutrašnje. Tragamo za srećom, za identitetom, tragamo pokušavajući da odgovorimo na mnoga pitanja. Kroz razgovore i putovanja, ovo je moja potraga, moj pokušaj da pobegnem od besmisla.\n\nAgelast podcast je projekat Galeba Nikačevića.'},
+    'country': 'RS'},
+   'contentDetails': {'relatedPlaylists': {'likes': '',
+     'uploads': 'UUxunmKtYfMYjnf6Mp4eWBxg'}},
+   'statistics': {'viewCount': '26265876',
+    'subscriberCount': '133000',
+    'hiddenSubscriberCount': False,
+    'videoCount': '398'}}]}
+	
+--Sad je lako raspakivati:
+
+--Do naziva kanala cemo doci ovako>
+
+rjecnik['items'][0]['snippet']['title']
+
+Rezultat:
+'Agelast'
+
+--Sad ganjam kako cu doci do statistics:
+rjecnik['items'][0]['statistics']
+
+Rez:
+{'viewCount': '26265876',
+ 'subscriberCount': '133000',
+ 'hiddenSubscriberCount': False,
+ 'videoCount': '398'}
+ 
+I sad do svakog pojedinacnog podatka dolazim prozivajuci pojedini kljuc:
+rjecnik['items'][0]['statistics']['viewCount']
+rjecnik['items'][0]['statistics']['subscriberCount']
+rjecnik['items'][0]['statistics']['videoCount']
+
+
+--Zato cemo modifikovati prethodnu f-ju da dodjemo do ovoga sta nam treba na nacin kako sam sad objasnio.
+--Posto u toj f-ji vracamo response, a sad treba da vratimo nekoliko podatka, sve cemo ih strpati u jedan rjecnik i u stvari vraticemo rjecnik.
+--Evo modifikovane f-je:
+
+
+def get_channel_stats(youtube,channel_id):
+    #dio koda za podizanje zahtjeva, vidi onaj kopirani kod iz doc.
+    request = youtube.channels().list(part='snippet,contentDetails,statistics', id = channel_id)
+    #da bismo pokrenuli ovaj request:
+    response = request.execute()
+    data = dict(Channel_name = response['items'][0]['snippet']['title'],
+                Views = response['items'][0]['statistics']['viewCount'],
+                Subscribers = response['items'][0]['statistics']['subscriberCount'],
+                Total_videos = response['items'][0]['statistics']['videoCount'])
+    #kao izlaz vracamo rjecnik data
+    return data
+	
+--Sad je opet pozovemo da testiramo:
+
+get_channel_stats(youtube,channel_id)
+
+Rez:
+{'Channel_name': 'Agelast',
+ 'Views': '26265876',
+ 'Subscribers': '133000',
+ 'Total_videos': '398'}
+ 
+
+--Sad cemo dalje modifikovati f-ju tako da pristupa ne jednom vec nekoliko yt kanala:
+Teofik je u opisu videa dao link na njegov blog odakle se moze dovuci njegov kod u kojem se vide YT id-evi od nekoliko DS i DA Youtubera:
+https://techtfq.com/video/python-project-to-scrape-youtube-using-youtube-data-api
+
+Sa tog bloga sam dovukao njegov JN fajl, preimenovao sam ga da se ne pomijesa sa mojim i ubacio u folder Project odakle ga mogu otvoriti
+u svom JN:
+
+techTFQ_YT-Analysis-project.ipynb
+
+Odatle sam pokupio ostale YT ID-eve:
+
+channel_ids = ['UCnz-ZXXER4jOvuED5trXfEA', # techTFQ
+               'UCLLw7jmFsvfIVaUFsLs8mlQ', # Luke Barousse 
+               'UCiT9RITQ9PW6BhXK0y2jaeg', # Ken Jee
+               'UC7cs8q-gJRlGwj4A8OmCmXg', # Alex the analyst
+               'UC2UXDak6o7rBm23k3Vv5dww' # Tina Huang
+              ]
+
+a ja sam uspio doci i do jos nekih YT channel ID-eva.
+Evo kako:
+Odem na YT kanal neciji, onda desni klik i kazem View page source, otvori se html kod stranice, tu kazem ctrl+F da se otvori search prozor,
+u prozoru trazim channel_id i negdje 9ti ili 10ti match sadrzi ID kanala.
+Evo nekih:
+
+Data Profesor:
+
+channel_id=UCV8e2g4IWQqK71bbzGDEI4Q
+
+Ken Jee
+
+channel_id=UCiT9RITQ9PW6BhXK0y2jaeg
+
+Krish Naik:
+
+channel_id=UCNU_lfiiWBdtULKOw6X0Dig
+
+Python programmer:
+
+channel_id=UC68KSmHePPePCjW4v57VPQg
+
+Tina Huang:
+
+channel_id=UC2UXDak6o7rBm23k3Vv5dww
+
+Corey Schafer:
+
+channel_id=UCCezIgC97PvUuR4_gbFUs5g
+
+Shashank Kalanithi:
+
+externalId: UCvZnwzmc3m1Eush-Or8Z6DA
+
+Sad cu sastaviti listu kanala ciju statistiku zelim da upratim (prepravicu malo Teufikovu):
+
+channel_ids = ['UCV8e2g4IWQqK71bbzGDEI4Q', # Data Professor
+               'UCNU_lfiiWBdtULKOw6X0Dig', # Krish Naik 
+               'UCiT9RITQ9PW6BhXK0y2jaeg', # Ken Jee
+               'UC7cs8q-gJRlGwj4A8OmCmXg', # Alex the analyst
+               'UC2UXDak6o7rBm23k3Vv5dww', # Tina Huang
+			   'UCvZnwzmc3m1Eush-Or8Z6DA'  # Shashank Kalanithi
+              ]
+
+--Sad u kodu u JN umjesto channel_id ubacujem ovu listu channel_ids. Znaci svuda se u f-ji mora promijeniti channel_id sa channel_ids
+i jos se mora u request dijelu, posto sad ne saljem samo jednu vrijednost nego listu, moram prvo tu listu konvertovati u string koristeci join metodu:
+
+U stvari, napisacu novu f-ju:
+
+get_channels_stats
+---------------------
+
+def get_channels_stats(youtube,channel_ids):
+    #dio koda za podizanje zahtjeva, vidi onaj kopirani kod iz doc.
+    request = youtube.channels().list(part='snippet,contentDetails,statistics', id = ','.join(channel_ids))
+    #da bismo pokrenuli ovaj request:
+    response = request.execute()
+    #data = dict(Channel_name = response['items'][0]['snippet']['title'],
+    #           Views = response['items'][0]['statistics']['viewCount'],
+    #          Subscribers = response['items'][0]['statistics']['subscriberCount'],
+    #         Total_videos = response['items'][0]['statistics']['videoCount'])
+    #kao izlaz vracamo rjecnik data
+    return response
+
+/////
+Napomena>
+join metoda ce od liste napraviti string clanova liste odvojen zarezima
+
+Npr.
+l = ['ja','citam']
+lj = ','.join(l)
+
+lj 
+'ja,citam'
+/////
+
+--Sad pokrenem ovu gore f-ju i ispisu se podaci za sve ove kanale.
+
+--Sad radi boljeg zakljucivanja opet mozrmo citav response prebaciti na onu stranicu za tumacenje dictionarija:
+https://codebeautify.org/python-formatter-beautifier
+
+Formatirao sam fino ovaj response i snimio ga na lokaciju:
+D:\Sinisa\MIS Projects\N#126163_Praksa studenata PMF-a u MIS-u\Data Analyst Portfolio Projects\DA_Project_6
+
+kao fajl: response za 6 kanala.txt
+
+Kad se otvori taj fajl vidi se da sad pod kljucem items umjesto jednog rjecnika sad imam 6 rjecnika kao clanova liste.
+Ostala struktura je u stvari ista.
+Znaci, samo treba modifikovati f-ju get_channels_stats tako da se mijenja clan liste koji se posmatra, dakle treba nam petlja.
+Sad cu to opet malo istestirati u pomocnom JN-u> Pomocni_JN_za DAProj6
+
+///
+Dobro objasnjenje Python range f-je:
+https://www.w3schools.com/python/ref_func_range.asp
+///
+
+Modifikujemo f-ju:
+Posto smo ranije vracali samo jedan rjecnik u data, a sad imamo 6 rjecnika koje trebamo vratiti, u stvari vraticemo listu rjecnika
+u varijabli all_data (pogledati pomocni JN kako to radi):
+
+def get_channels_stats(youtube,channel_ids):
+    all_data = [] #inicijalizacija liste rjecnika koju f-ja treba vratiti kao rezultat
+    #dio koda za podizanje zahtjeva, vidi onaj kopirani kod iz doc.
+    request = youtube.channels().list(part='snippet,contentDetails,statistics', id = ','.join(channel_ids))
+    #da bismo pokrenuli ovaj request:
+    response = request.execute()
+    
+	for i in range(len(response['items'])):
+	    data = dict(Channel_name = response['items'][i]['snippet']['title'],
+        Views = response['items'][i]['statistics']['viewCount'],
+        Subscribers = response['items'][i]['statistics']['subscriberCount'],
+        Total_videos = response['items'][i]['statistics']['videoCount'])
+		all_data.append(data) #pri svakom prolasku kroz petlju listi all_data dodaje se novi rjecnik data
+    #kao izlaz vracamo listu rjecnika all_data
+    return all_data
+
+--Testiram ovu f-ju:
+
+get_channels_stats(youtube,channel_ids)
+
+Rezultat:
+
+[{'Channel_name': 'Data Professor',
+  'Views': '3381037',
+  'Subscribers': '132000',
+  'Total_videos': '290'},
+ {'Channel_name': 'Krish Naik',
+  'Views': '59631764',
+  'Subscribers': '629000',
+  'Total_videos': '1468'},
+ {'Channel_name': 'Shashank Kalanithi',
+  'Views': '4350295',
+  'Subscribers': '101000',
+  'Total_videos': '140'},
+ {'Channel_name': 'Ken Jee',
+  'Views': '6800036',
+  'Subscribers': '214000',
+  'Total_videos': '237'},
+ {'Channel_name': 'Alex The Analyst',
+  'Views': '10672707',
+  'Subscribers': '268000',
+  'Total_videos': '160'},
+ {'Channel_name': 'Tina Huang',
+  'Views': '15158422',
+  'Subscribers': '387000',
+  'Total_videos': '106'}]
+  
+--Sad cemo koristiti pandas da ucitamo ovo u data frame i da vizualizujemo podatke:
+Prvo cemo ucitati ove podatke u neku varijablu:
+
+channel_statistics = get_channels_stats(youtube,channel_ids)
+
+--Sad ucitavamo to u pandas df:
+
+channel_data = pd.DataFrame(channel_statistics)
+
+Rez:
+Dobijamo fini tabelarni pregled podataka.
+
+--Sad zelimo da vizualizujemo podatke, medjutim podaci u ovoj tabeli iako su brojcani nisu tipa integer u df-u.
+Provjerimo to:
+
+channel_data.dtypes
+
+Rez:
+Channel_name    object
+Views           object
+Subscribers     object
+Total_videos    object
+dtype: object
+
+sve ovo sto je object je u stvari znakovni tip podataka, pa to sve treba prebaciti u integer.
+
+channel_data['Subscribers'] = pd.to_numeric(channel_data['Subscribers'])
+channel_data['Views'] = pd.to_numeric(channel_data['Views'])
+channel_data['Total_videos'] = pd.to_numeric(channel_data['Total_videos'])
+
+--Nakon ovoga kad provjerimo opet:
+
+channel_data.dtypes
+
+Rez:
+Channel_name    object
+Views            int64
+Subscribers      int64
+Total_videos     int64
+dtype: object
+
+--Dakle sve kolone koje su bile char tipa postale su integer.
+
+--Vizualizacija podataka:
+--Da vidimo koji kanal ima najvise pretplatnika?
+ax = sns.barplot(x = 'Channel_name', y = 'Subscribers', data = channel_data)
+
+iscrta se barplot, ali mi se preklapaju nazivi kanala na x-osi pa sam na stackoverflowu nasao nacin kako da to rijesim:
+https://stackoverflow.com/questions/42528921/how-to-prevent-overlapping-x-axis-labels-in-sns-countplot
+
+Prvo sam importovao plotly:
+
+import matplotlib.pyplot as plt
+
+a zatim:
+
+ax = sns.barplot(x = 'Channel_name', y = 'Subscribers', data = channel_data)
+ax.set_xticklabels(ax.get_xticklabels(), rotation = 40, ha = "right")
+plt.tight_layout()
+plt.show()
+
+i onda se iscrta super barplot sa rotiranim nazivima kanala na x-osi, sve je ok.
+
+Medjutim Teufik ima drugu ideju, on ce povecati velicinu grafa:
+
+#Da povecamo velicinu grafika
+sns.set(rc = {'figure.figsize':(10,8)})
+ax = sns.barplot(x = 'Channel_name', y = 'Subscribers', data = channel_data)
+
+Rez>
+Iscrta se veci graf
+
+Vidimo da Krish Naik ima najveci broj pretplatnika.
+
+--Sad cemo vidjeti ko ima najveci broj pregleda:
+#Sad trazimo ko ima najveci broj pregleda
+ax = sns.barplot(x = 'Channel_name', y = 'Views', data = channel_data)
+
+opet Krish ima ubjedljivo najvise pregleda.
+
+--Sad gledamo ko ima najvise postavljenih videa>
+#Ko ima najvise postavljenih videa?
+ax = sns.barplot(x = 'Channel_name', y = 'Total_videos', data = channel_data)
+
+opet Krish Naik dere sve ostale.
+
+(32:33) 2.dio: Scrape, Analyze&Visualize - Video Details
+------------------------------------------------------------
+
+--Pristupicemo videima od Krisha i analiziracemo ih
+--prvo trebamo doci do video id-eva i na osnovu toga da dodjemo do svih detalja u vezi tih videa
+
+Vratimo se na response object, tj. txt dokument gdje smo ga sacuvali, idemo na items---> contentDetails:
+
+ "contentDetails": {
+                "relatedPlaylists": {"likes": "", "uploads": "UUNU_lfiiWBdtULKOw6X0Dig"}
+				
+ovo iza uploads je u stvari ID playliste i ako to znamo onda mozemo ekstrahovati sve videe iz tog kanala.
+
+Npr. kad odem na YT i odem na neku playlistu od Krisha Naika i samo onda u linku gore zamijenim id dio sa ovim gore id-em,
+dobijam link:
+
+https://www.youtube.com/playlist?list=UUNU_lfiiWBdtULKOw6X0Dig
+
+i tu su u stvari svi uploadi Krishovi na YT.
+
+Prvo treba da sacuvamo ovaj uploads ID u DF-u.
+Zato cemo promijeniti f-ju koju smo vec napravili tako sto cemo dodati dio u kojem se kupi i ovaj upload id:
+To se nalazi na putanji:
+
+response['items'][i]['contentDetails']['relatedPlaylists']['uploads']
+
+Sad ce f-ja izgledati ovako:
+
+
+#Modifikujemo f-ju dodajuci playlist id
+def get_channels_stats(youtube,channel_ids):
+    all_data = [] #inicijalizacija liste rjecnika koju f-ja treba vratiti kao rezultat
+    #dio koda za podizanje zahtjeva, vidi onaj kopirani kod iz doc.
+    request = youtube.channels().list(part='snippet,contentDetails,statistics', id = ','.join(channel_ids))
+    #da bismo pokrenuli ovaj request:
+    response = request.execute()
+    
+    for i in range(len(response['items'])):
+        data = dict(Channel_name = response['items'][i]['snippet']['title'],
+        Views = response['items'][i]['statistics']['viewCount'],
+        Subscribers = response['items'][i]['statistics']['subscriberCount'],
+        Total_videos = response['items'][i]['statistics']['videoCount'],
+        playlist_id = response['items'][i]['contentDetails']['relatedPlaylists']['uploads'])
+        all_data.append(data) #pri svakom prolasku kroz petlju listi all_data dodaje se novi rjecnik data
+    #kao izlaz vracamo listu rjecnika all_data
+    return all_data
+
+
+--Sad ponovimo:
+channel_statistics = get_channels_stats(youtube,channel_ids)
+channel_data = pd.DataFrame(channel_statistics)
+channel_data
+
+Rez:
+Dobijemo dodatnu kolonu sa playlist_id podacima.
+
+--Sad nam treba f-ja za pribavljanje svih video id-eva za odredjeni kanal, a onda cemo za svaki video id pokupiti detalje:
+
+##F-ja za dobijanje video id-eva:
+
+def get_video_ids(youtube,playlist_id):
+
+Idemo opet u dokumentaciju pa pod Reference---> Playlistitems ---> list:
+pa pod Required parameters vidimo da je playlist id zahtijevani parametar.
+Koristimo metodu playlistItem:
+
+def get_video_ids(youtube,playlist_id):
+    request = youtube.playlistItems().list(
+               part = 'contentDetails',
+               playlistId = playlist_id)
+    response = request.execute()
+    
+    return response
+
+	
+--jos trebamo iz DF-a ekstrahovati playlistId-eve i strpati ih u neku varijablu:
+Za DF nam znaci treba loc metoda:
+
+////////////////////////////////
+Kako se pristupa podacima u DF-u?
+
+--Radim, vjezbam u pomocnom JN:
+
+Prvo da rekreiram ove podatke kao df u pomocnom JN:
+
+Channel_name	Views	Subscribers	Total_videos	playlist_id
+0	Ken Jee	6804591	214000	237	UUiT9RITQ9PW6BhXK0y2jaeg
+1	Krish Naik	59716106	630000	1470	UUNU_lfiiWBdtULKOw6X0Dig
+2	Tina Huang	15180191	387000	106	UU2UXDak6o7rBm23k3Vv5dww
+3	Shashank Kalanithi	4356578	101000	141	UUvZnwzmc3m1Eush-Or8Z6DA
+4	Alex The Analyst	10700064	268000	160	UU7cs8q-gJRlGwj4A8OmCmXg
+5	Data Professor	3384752	132000	290	UUV8e2g4IWQqK71bbzGDEI4Q
+
+--Da mi bude lakse, prvo cu od ovih podataka napraviti liste:
+
+l1 = ['Ken Jee',6804591,214000,237,'UUiT9RITQ9PW6BhXK0y2jaeg']
+l2 = ['Krish Naik',59716106,630000,1470,'UUNU_lfiiWBdtULKOw6X0Dig']
+l3 = ['Tina Huang',15180191,387000,106,'UU2UXDak6o7rBm23k3Vv5dww']
+l4 = ['Shashank Kalanithi',4356578,101000,141,'UUvZnwzmc3m1Eush-Or8Z6DA']
+l5 = ['Alex The Analyst',10700064,268000,160,'UU7cs8q-gJRlGwj4A8OmCmXg']
+l6 = ['Data Professor',3384752,132000,290,'UUV8e2g4IWQqK71bbzGDEI4Q']
+
+--A onda cu od tih listi napraviti DF u pomocnom JN-u (prethodno sam u tom JN-u importovao numpy i pandas)
+
+df = pd.DataFrame([l1,l2,l3,l4,l5,l6],
+                   index = [0,1,2,3,4,5],
+				   columns = ['Channel_name','Views','Subscribers','Total_videos','playlist_id'])
+
+
+--Super, sad sam dobio isti onakav df kao sto imam u pravom JN:
+
+--Sad koristim znanje onoga sto sam jos 2019. radio u okviru:
+D:\Sinisa\Learning&Study\DataScienceStudy\DS07_DSProj&Spec&Cert\Python for Data Science and Machine Learning Bootcamp
+docx:
+Python for Data Science and Machine Learning Bootcamp_S1_S6.docx, str. 71 pa nadalje:
+///////////////////////////////
+!!!STIGAO DO 39:28!!!
+
+#Nacin da dobijemo preko imena kanala playlist_id, primjer kanal Ken Jee
+playlist_id = channel_data.loc[channel_data['Channel_name'] == 'Ken Jee','playlist_id'].iloc[0]
+
+
+Onda def f-je:
+
+def get_video_ids(youtube,playlist_id):
+    request = youtube.playlistItems().list(
+               part = 'contentDetails',
+               playlistId = playlist_id)
+    response = request.execute()
+    
+    return response
+	
+Onda je pozovemo:
+
+get_video_ids(youtube,playlist_id)
+
+I dobijemo response objekat>
+
+ali za samo 5 videa.
+
+Kako sad dobiti za kompletan broj videa po jednom kanalu?
+Potrebno je dodati u f-ji (iz dokumentacije):
+
+def get_video_ids(youtube,playlist_id):
+    request = youtube.playlistItems().list(
+               part = 'contentDetails',
+               playlistId = playlist_id,
+			   maxResults = 50)
+    response = request.execute()
+    
+    return response
+
+Sad kad opet pozovemo f-ju:
+
+get_video_ids(youtube,playlist_id)
+
+Dobiju se detalji o 50 videa. Ali to jos nije dovoljno jer Ken Jee ima preko 200 videa.
+
+Ako kopiramo izlaz iz f-je i pasteujemo ga u npr.
+https://jsonformatter.curiousconcept.com/#
+
+Tu vidimo da pod items imam contentDetails i u svakom contentDetailsu imam video ID za svaki pojedinacni video.
+
+Prvo cemo za ovih 50 videa za koje znamo kako da dodjemo do njih, pronaci video id:
+
+/////
+Ovo cemo opet preko pomocnog JN-a:
+Tamo sam u varijablu vid ubacio rjecnik koji se dobije kao rez ove gore f-je.
+I onda sa:
+len(vid['items'])
+Dobije 50.
+To znaci da on sad iterira po 50 videa iz izlaza f-je.
+
+A kako cemo doci do video id-a:
+vid['items'][0]['contentDetails']['videoId']
+///////
+
+Sad to primijenimo u for petlji u f-ji:
+
+def get_video_ids(youtube,playlist_id):
+    request = youtube.playlistItems().list(
+               part = 'contentDetails',
+               playlistId = playlist_id,
+			   maxResults = 50)
+    response = request.execute()
+	video_ids = [] #video id-jeve cemo cuvati u listi
+    for i in range(len(response['items'])):
+	    video_ids.append(response['items'][i]['contentDetails']['videoId'])
+    return len(video_ids)
+
+--Medjutim mi zelimo da izvucemo video id-eve za sve videe, a ne samo za 50.
+Ako pogledamo u formated JSON vidimo da postoji polje>
+
+"nextPageToken":"EAAaBlBUOkNESQ",
+
+a, to ce uvijek biti kad neko ima vise od 50 videa.
+
+Sad nam za to treba logika:
+
+next_page_token = response['nextPageToken']
+
+medjutim, u rjecniku nece uvijek postojati ovaj token.
+Zato cemo umjesto ovoga gore koristiti:
+
+next_page_token = response.get('nextPageToken')
+
+--> ako u rjecniku postoji ta vrijedost onda ce se ona upisati u varijablu next_page_token, a ako ne postoji onda ce se upisati None
+
+Postavljamo varijablu more_pages na True>
+
+more_pages = True
+
+i onda preko while petlje:
+
+while more_pages:
+    if next_page_token is None:
+	    more_pages = False
+	else:
+	    request = youtube.playlistItems().list(
+               part = 'contentDetails',
+               playlistId = playlist_id,
+			   maxResults = 50,
+			   ) #traba nam jos jedan parametar
+		response = request.execute()   
+			   
+--Idemo opet u dokumentaciju:
+potrazimo parametar pageToken
+
+while more_pages:
+    if next_page_token is None:
+	    more_pages = False
+	else:
+	    request = youtube.playlistItems().list(
+               part = 'contentDetails',
+               playlistId = playlist_id,
+			   maxResults = 50,
+			   pageToken = next_page_token) 
+		response = request.execute() 
+		
+--Sad koristimo opet onu for petlju:
+
+while more_pages:
+    if next_page_token is None:
+	    more_pages = False
+	else:
+	    request = youtube.playlistItems().list(
+               part = 'contentDetails',
+               playlistId = playlist_id,
+			   maxResults = 50,
+			   pageToken = next_page_token) 
+		response = request.execute()
+		
+		for i in range(len(response['items'])):
+	        video_ids.append(response['items'][i]['contentDetails']['videoId'])
+
+        #i onda kad se isprocesira jedna stranica ponovo se setuje next page token:
+		next_page_token = response.get('nextPageToken')
+		
+Komplet f-ja sad izgleda ovako:
+
+def get_video_ids(youtube,playlist_id):
+    request = youtube.playlistItems().list(
+               part = 'contentDetails',
+               playlistId = playlist_id,
+               maxResults = 50)
+    response = request.execute()
+    video_ids = [] #video id-jeve cemo cuvati u listi
+    for i in range(len(response['items'])):
+        video_ids.append(response['items'][i]['contentDetails']['videoId'])
+        
+    #Dio f-je koji barata sa next page
+    next_page_token = response.get('nextPageToken')
+    more_pages = True
+    while more_pages:
+        if next_page_token is None:
+            more_pages = False
+        else:
+            request = youtube.playlistItems().list(
+               part = 'contentDetails',
+               playlistId = playlist_id,
+               maxResults = 50,
+               pageToken = next_page_token) 
+            response = request.execute()
+        
+            for i in range(len(response['items'])):
+                video_ids.append(response['items'][i]['contentDetails']['videoId'])
+
+            #i onda kad se isprocesira jedna stranica ponovo se setuje next page token:
+            next_page_token = response.get('nextPageToken')
+    return len(video_ids)
+	
+--Sad kad to pokrenemo:
+get_video_ids(youtube,playlist_id)
+
+Dobije se:
+238
+a to je zaista broj koliko trenutno Ken Jee ima videa.
+
+--Ako hocemo da vidimo te id-eve, samo na kraju umjesto duzine liste vratimo samu listu>
+
+def get_video_ids(youtube,playlist_id):
+    request = youtube.playlistItems().list(
+               part = 'contentDetails',
+               playlistId = playlist_id,
+               maxResults = 50)
+    response = request.execute()
+    video_ids = [] #video id-jeve cemo cuvati u listi
+    for i in range(len(response['items'])):
+        video_ids.append(response['items'][i]['contentDetails']['videoId'])
+        
+    #Dio f-je koji barata sa next page
+    next_page_token = response.get('nextPageToken')
+    more_pages = True
+    while more_pages:
+        if next_page_token is None:
+            more_pages = False
+        else:
+            request = youtube.playlistItems().list(
+               part = 'contentDetails',
+               playlistId = playlist_id,
+               maxResults = 50,
+               pageToken = next_page_token) 
+            response = request.execute()
+        
+            for i in range(len(response['items'])):
+                video_ids.append(response['items'][i]['contentDetails']['videoId'])
+
+            #i onda kad se isprocesira jedna stranica ponovo se setuje next page token:
+            next_page_token = response.get('nextPageToken')
+    return video_ids
+
+I kad pozovemo f-ju:
+
+get_video_ids(youtube,playlist_id)
+
+dobije se lista svih 238 video id-eva
+
+--Sad pisemo funkciju koja ce izvuci detalje iz svih ovih videa (48:42):
+
+Funkcija za dobijanje detalja videa(48:45):
+-----------------------------------
+
+def get_video_details(youtube, video_ids):
+    
+--Idemo opet u dokumentaciju, pa pod Videos ---> list, pa pod list by multiple video ID, pa idemo na primjer koda, pa pod Python>
+
+Kopracu ovdje komplet taj primjer:
+////////////////////////////////////////////////////////
+# -*- coding: utf-8 -*-
+
+# Sample Python code for youtube.videos.list
+# See instructions for running these code samples locally:
+# https://developers.google.com/explorer-help/code-samples#python
+
+import os
+
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
+import googleapiclient.errors
+
+scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
+
+def main():
+    # Disable OAuthlib's HTTPS verification when running locally.
+    # *DO NOT* leave this option enabled in production.
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+    api_service_name = "youtube"
+    api_version = "v3"
+    client_secrets_file = "YOUR_CLIENT_SECRET_FILE.json"
+
+    # Get credentials and create an API client
+    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+        client_secrets_file, scopes)
+    credentials = flow.run_console()
+    youtube = googleapiclient.discovery.build(
+        api_service_name, api_version, credentials=credentials)
+
+    request = youtube.videos().list(
+        part="snippet,contentDetails,statistics",
+        id="Ks-_Mh1QhMc,c0KYU2j0TM4,eIho2S0ZahI"
+    )
+    response = request.execute()
+
+    print(response)
+
+if __name__ == "__main__":
+    main()
+//////////////////////////////////////
+
+def get_video_details(youtube, video_ids):
+    request = youtube.videos().list(
+        part = "snippet,statistics",
+        id = ','.join(video_ids)
+                                   )
+	response = request.execute()
+	
+	return response
+	
+Kad pozovemo ovu f-ju:
+
+get_video_details(youtube, video_ids)
+
+Dobijemo error zbog toga sto ne mozemo pozvati vise od 50 videa u requestu.
+ Zato kad modifikujemo da gledamo samo 50 videa:
+
+def get_video_details(youtube, video_ids):
+    request = youtube.videos().list(
+        part = "snippet,statistics",
+        id = ','.join(video_ids[:50]) #ogranicili smo na 50 videa
+                                   )
+	response = request.execute()
+ 
+Kad pozovemo ovu f-ju:
+
+get_video_details(youtube, video_ids)
+
+dobijamo rezultate.
+
+Sad opet prekopiramo ovaj izlaz u JSON formater:
+
+Mi zelimo da pokupimo:
+
+Unutar snippet:
+"publishedAt":"2022-08-29T13:00:01Z",
+"title":"When a New Data Scientist Joins The Team"
+
+Unutar statistics:
+"statistics":{
+            "viewCount":"4549",
+            "likeCount":"284",
+            "favoriteCount":"0",
+            "commentCount":"65"
+			
+--Medjutim prije toga moramo modifikovati nasu f-ju tako da hvata sve videe, a ne samo njih 50:
+
+To cemo uraditi koristeci petlju:
+
+for i in range(0,len(video_ids),50):
+
+znaci idemo do ukupnog broja videa, ali po 50 u jednom koraku, tj. po svakom requestu.
+
+Zato se mora promijeniti i dio gdje pridruzujemo id-eve u varijablu id:
+
+id = ','.join(video_ids[i:i+50])
+
+Zato nam za svaki prolaz treba varijabla gdje cemo cuvati rezultat prolaza:
+
+all_video_stats = []
+
+U svakom prolazu kreira se rjecnik response i iz tog rjecnika nam pod tagom items trebaju snippet i statistics detalji.
+Zato cemo kreirati jos jednu for petlju:
+
+for video in response['items']:
+    video_stats = dict(Title = video['snippet']['title'],
+	                   Published_date = video['snippet']['publishedAt'],
+					   Views = video['statistics']['viewCount'],
+					   Likes = video['statistics']['likeCount'],
+					   Favorites = video['statistics']['favoriteCount'],
+					   Comments = video['statistics']['commentCount']
+						)
+						
+#Sad cemo pri svakom prolaztu ovaj rjecnik appendovati u listu all_video_stats:
+
+    all_video_stats.append(video_stats)
+	
+Komplet f-ja sad izgleda ovako:
+
+def get_video_details(youtube, video_ids):
+    all_video_stats = []
+	for i in range(0,len(video_ids),50):
+        request = youtube.videos().list(
+                  part = "snippet,statistics",
+                  id = ','.join(video_ids[i:i+50]) 
+                                   )
+	    response = request.execute()
+
+        for video in response['items']:
+            video_stats = dict(Title = video['snippet']['title'],
+	                   Published_date = video['snippet']['publishedAt'],
+					   Views = video['statistics']['viewCount'],
+					   Likes = video['statistics']['likeCount'],
+					   Favorites = video['statistics']['favoriteCount'],
+					   Comments = video['statistics']['commentCount']
+						)
+			all_video_stats.append(video_stats)
+			
+	return all_video_stats
+	
+--Super, f-ja radi i vraca detalje za svih 238 videa od Kena Jeeja.
+
+--Sacuvacemo rezultate u varijabli video_details
+
+video_details = get_video_details(youtube, video_ids)
+
+--I onda cemo to prebaciti u data frame:
+
+video_data = pd.DataFrame(video_details)
+
+Kad vidimo ovaj df dobijemo tabelu rezultata.
+--(samo sto sad nemamo vise podatka o dislikeovima jer izgleda yt to vise ne broji)
+
+--Sad cemo nad ovim podacima uraditi malu analizu i vizualizaciju:
+
+--Koji su top 10 Ken Jeeevih videa?
+
+--Prema najvecem broju vieweva:
+
+--Prije toga moramo promijeniti tip podataka iz char u numeric za brojeve i u datumima nas interesuje date, a ne timestamp:
+
+video_data['Published_date'] = pd.to_datetime(video_data['Published_date']).dt.date
+video_data['Views'] = pd.to_numeric(video_data['Views'])
+video_data['Likes'] = pd.to_numeric(video_data['Likes'])
+video_data['Favorites'] = pd.to_numeric(video_data['Favorites'])
+video_data['Comments'] = pd.to_numeric(video_data['Comments'])
+
+--Sad cemo sortirati po opadajucem redoslijedu po Views:
+
+top10_videos = video_data.sort_values(by = 'Views', ascending = False)
+
+--Kad prikazemo podatke vidimo da je sad sortirano od najgledanijih prema manje gledanim videima
+
+--I sad samo koristimo head metodu da dodjemo do prvih 10 videa.
+
+top10_videos = video_data.sort_values(by = 'Views', ascending = False).head(10)
+
+kad pozovemo varijablu dobije se prvih 10 videa po ledanosti.
+
+--Sad cemo napraviti stupcasti graf, koristeci seaborn:
+
+ax1 = sns.barplot(x = 'Views', y = 'Title', data = top10_videos)
+
+--Prikaze se bar plot graf iz kojeg se vidi da jedan video ima toliko pregleda koliko svi ostali zajedno.
+
+--Sad zelimo da vidimo koliko on postuje videa svakog mjeseca?
+
+Za to nam treba nova kolona koja ce nam dati mjesec postavljanja videa>
+
+video_data['Month'] = pd.to_datetime(video_data['Published_date']).dt.strftime('%b')
+
+Sad kad pokrenemo df, dobijemo novu kolonu Month sa mjesecom izlaska videa.
+
+#Sad nas interesuje koliko postavlja videa po svakom mjesecu?
+
+--Treba nam group by po mjesecu:
+
+videos_per_month = video_data.groupby('Month').size()
+
+Dobijamo:
+
+Month
+Apr    20
+Aug    24
+Dec    19
+Feb    15
+Jan    21
+Jul    25
+Jun    19
+Mar    22
+May    21
+Nov    19
+Oct    16
+Sep    17
+
+ali sad nam je tu Month kao indeks, a mi to necemo nego zelim da mi je podatak:
+
+videos_per_month = video_data.groupby('Month', as_index = False).size()
+
+I onda dobijamo pravi dataframe>
+	Month	size
+0	Apr	20
+1	Aug	24
+2	Dec	19
+3	Feb	15
+4	Jan	21
+5	Jul	25
+6	Jun	19
+7	Mar	22
+8	May	21
+9	Nov	19
+10	Oct	16
+11	Sep	17
+
+#Sad zelimo da ove indexe pretvorimo u imena mjeseca i da onda to sortiramo po tome
+
+--Tu sad uvodim listu prema kojoj zelim da se sortira:
+
+sort_order = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
+--Sad kreiramo novi index :
+
+videos_per_month.index = pd.CategoricalIndex(videos_per_month['Month'], categories = sort_order, ordered = True)
+
+--I onda kad pozovemo:
+
+videos_per_month.sort_index()
+
+ispadne sve kako smo zeljeli:
+
+	Month	size
+Month		
+Jan	Jan	21
+Feb	Feb	15
+Mar	Mar	22
+Apr	Apr	20
+May	May	21
+Jun	Jun	19
+Jul	Jul	25
+Aug	Aug	24
+Sep	Sep	17
+Oct	Oct	16
+Nov	Nov	19
+Dec	Dec	19
+
+Sad to smjestimo u neku varijablu:
+
+videos_per_month = videos_per_month.sort_index()
+
+--Sad cemo uraditi jednostavnu vizualizaciju:
+
+--Koliko Ken Jee postavi videa po mjesecu:
+
+ax2 = sns.barplot(x = 'Month', y = 'size', data = videos_per_month)
+
+#izadje bar plot u kojem se vidi da Ken Jee postavi najvise videa u julu
+
+#Sad ako zelimo da podatke izvezemo u csv:
+
+video_data.to_csv('Video_details_KenJee.csv')
+
+i onda se u folderu Project kreira taj csv
+
+
+
+
+
+
+
+
+
+
+
+
+

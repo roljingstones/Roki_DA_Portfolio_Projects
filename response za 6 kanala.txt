@@ -1,0 +1,257 @@
+{
+    "kind": "youtube#channelListResponse",
+    "etag": "LVDqaWt6coiLLmpa92xn2a1_LYg",
+    "pageInfo": {"totalResults": 6, "resultsPerPage": 5},
+    "items": [
+        {
+            "kind": "youtube#channel",
+            "etag": "3a5xm770ymh5YzCN1CAtqQhrNH8",
+            "id": "UCvZnwzmc3m1Eush-Or8Z6DA",
+            "snippet": {
+                "title": "Shashank Kalanithi",
+                "description": "Contact me on Instagram @shashankanalytics\nor\nTwitter @kalamari95\n\nI help people break into the world of Analytics. Let's learn together!",
+                "customUrl": "@shashankkalanithidata",
+                "publishedAt": "2011-10-01T21:44:24Z",
+                "thumbnails": {
+                    "default": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu_Gz1RP4YAbKAiAuD6549s69dRd08dTm8nuz10JFiw=s88-c-k-c0x00ffffff-no-rj",
+                        "width": 88,
+                        "height": 88,
+                    },
+                    "medium": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu_Gz1RP4YAbKAiAuD6549s69dRd08dTm8nuz10JFiw=s240-c-k-c0x00ffffff-no-rj",
+                        "width": 240,
+                        "height": 240,
+                    },
+                    "high": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu_Gz1RP4YAbKAiAuD6549s69dRd08dTm8nuz10JFiw=s800-c-k-c0x00ffffff-no-rj",
+                        "width": 800,
+                        "height": 800,
+                    },
+                },
+                "localized": {
+                    "title": "Shashank Kalanithi",
+                    "description": "Contact me on Instagram @shashankanalytics\nor\nTwitter @kalamari95\n\nI help people break into the world of Analytics. Let's learn together!",
+                },
+            },
+            "contentDetails": {
+                "relatedPlaylists": {"likes": "", "uploads": "UUvZnwzmc3m1Eush-Or8Z6DA"}
+            },
+            "statistics": {
+                "viewCount": "4350295",
+                "subscriberCount": "101000",
+                "hiddenSubscriberCount": False,
+                "videoCount": "140",
+            },
+        },
+        {
+            "kind": "youtube#channel",
+            "etag": "NIzhmVOKxQ2yK4Pi9gZd4tjHHL8",
+            "id": "UCV8e2g4IWQqK71bbzGDEI4Q",
+            "snippet": {
+                "title": "Data Professor",
+                "description": "Data Science, Machine Learning, Bioinformatics, Research and Teaching are my passion. The Data Professor YouTube channel is an extension of my passion in helping students and data enthusiast learn about Data Science and how it can be used to make sense of data. This channel provides Data Science contents consisting of explainer videos and practical tutorials.\n\nChanin Nantasenamat, Ph.D. is an Associate Professor of Bioinformatics at a Research University where he leads a research laboratory that harnesses data science for unraveling the hidden knowledge of big data in medicine. Chanin has more than 15 years of experience in data science (as applied to bioinformatics) and has published more than 100 research articles, review articles and book chapters.\n\nIf you are fascinated about data science, it would mean the world to me if you would consider subscribing to this channel (by clicking the link below):\nhttp://bit.ly/dataprofessor\n\nรศ.ดร.ชนินทร์ นันทเสนามาตร์",
+                "customUrl": "@dataprofessor",
+                "publishedAt": "2019-08-17T15:59:56Z",
+                "thumbnails": {
+                    "default": {
+                        "url": "https://yt3.ggpht.com/EmRXtmekiAtfdfr1INwbV02X1EzYkuLv9kcoGTnMX5FeHbcqegH2swqJtZOX4kOWIt4U-a8CuA=s88-c-k-c0x00ffffff-no-rj",
+                        "width": 88,
+                        "height": 88,
+                    },
+                    "medium": {
+                        "url": "https://yt3.ggpht.com/EmRXtmekiAtfdfr1INwbV02X1EzYkuLv9kcoGTnMX5FeHbcqegH2swqJtZOX4kOWIt4U-a8CuA=s240-c-k-c0x00ffffff-no-rj",
+                        "width": 240,
+                        "height": 240,
+                    },
+                    "high": {
+                        "url": "https://yt3.ggpht.com/EmRXtmekiAtfdfr1INwbV02X1EzYkuLv9kcoGTnMX5FeHbcqegH2swqJtZOX4kOWIt4U-a8CuA=s800-c-k-c0x00ffffff-no-rj",
+                        "width": 800,
+                        "height": 800,
+                    },
+                },
+                "localized": {
+                    "title": "Data Professor",
+                    "description": "Data Science, Machine Learning, Bioinformatics, Research and Teaching are my passion. The Data Professor YouTube channel is an extension of my passion in helping students and data enthusiast learn about Data Science and how it can be used to make sense of data. This channel provides Data Science contents consisting of explainer videos and practical tutorials.\n\nChanin Nantasenamat, Ph.D. is an Associate Professor of Bioinformatics at a Research University where he leads a research laboratory that harnesses data science for unraveling the hidden knowledge of big data in medicine. Chanin has more than 15 years of experience in data science (as applied to bioinformatics) and has published more than 100 research articles, review articles and book chapters.\n\nIf you are fascinated about data science, it would mean the world to me if you would consider subscribing to this channel (by clicking the link below):\nhttp://bit.ly/dataprofessor\n\nรศ.ดร.ชนินทร์ นันทเสนามาตร์",
+                },
+                "country": "TH",
+            },
+            "contentDetails": {
+                "relatedPlaylists": {"likes": "", "uploads": "UUV8e2g4IWQqK71bbzGDEI4Q"}
+            },
+            "statistics": {
+                "viewCount": "3381037",
+                "subscriberCount": "132000",
+                "hiddenSubscriberCount": False,
+                "videoCount": "290",
+            },
+        },
+        {
+            "kind": "youtube#channel",
+            "etag": "SCTCU6ggYvFdpMqX5FgT35Nuix8",
+            "id": "UCNU_lfiiWBdtULKOw6X0Dig",
+            "snippet": {
+                "title": "Krish Naik",
+                "description": "I am the cofounder of iNeuron and my experience is pioneering in machine learning, deep learning, and computer vision,an educator, and a mentor, with over 10 years' experience in the industry. This is my YouTube channel where I explain various topics on machine learning, deep learning, and AI with many real-world problem scenarios. I have delivered over 30 tech talks on data science, machine learning, and AI at various meet-ups, technical institutions, and community-arranged forums. My main aim is to make everyone familiar of ML and AI.Please subscribe and support the channel. As i love new technology, all these videos are free and I promise to make more interesting content as we go ahead.\nFor any collaboration drop me a mail at krishnaik06@gmail.com\n\nPlease free to drop a mail for Product unboxing, GPU's unboxing and any other collaboration",
+                "publishedAt": "2012-02-11T04:05:06Z",
+                "thumbnails": {
+                    "default": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu_Ow7V1PyNJXmvxUmamZqNR3IMT94rkYdJ0mz-8xQ=s88-c-k-c0x00ffffff-no-rj",
+                        "width": 88,
+                        "height": 88,
+                    },
+                    "medium": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu_Ow7V1PyNJXmvxUmamZqNR3IMT94rkYdJ0mz-8xQ=s240-c-k-c0x00ffffff-no-rj",
+                        "width": 240,
+                        "height": 240,
+                    },
+                    "high": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu_Ow7V1PyNJXmvxUmamZqNR3IMT94rkYdJ0mz-8xQ=s800-c-k-c0x00ffffff-no-rj",
+                        "width": 800,
+                        "height": 800,
+                    },
+                },
+                "localized": {
+                    "title": "Krish Naik",
+                    "description": "I am the cofounder of iNeuron and my experience is pioneering in machine learning, deep learning, and computer vision,an educator, and a mentor, with over 10 years' experience in the industry. This is my YouTube channel where I explain various topics on machine learning, deep learning, and AI with many real-world problem scenarios. I have delivered over 30 tech talks on data science, machine learning, and AI at various meet-ups, technical institutions, and community-arranged forums. My main aim is to make everyone familiar of ML and AI.Please subscribe and support the channel. As i love new technology, all these videos are free and I promise to make more interesting content as we go ahead.\nFor any collaboration drop me a mail at krishnaik06@gmail.com\n\nPlease free to drop a mail for Product unboxing, GPU's unboxing and any other collaboration",
+                },
+                "country": "IN",
+            },
+            "contentDetails": {
+                "relatedPlaylists": {"likes": "", "uploads": "UUNU_lfiiWBdtULKOw6X0Dig"}
+            },
+            "statistics": {
+                "viewCount": "59631764",
+                "subscriberCount": "629000",
+                "hiddenSubscriberCount": False,
+                "videoCount": "1468",
+            },
+        },
+        {
+            "kind": "youtube#channel",
+            "etag": "cLyk7dHaFGGTp2R8lyyILcl_8A8",
+            "id": "UC7cs8q-gJRlGwj4A8OmCmXg",
+            "snippet": {
+                "title": "Alex The Analyst",
+                "description": "My name is Alex Freberg and on this channel I will be going over everything you need to know to become a Data Analyst. If you are wanting to make a career change or learn the skills needed to become a Data Analyst, be sure to subscribe to stay up to date on all my latest content.\n\nYou can find me on LinkedIn at:\nhttps://www.linkedin.com/in/alex-freberg/\n\nAlexTheAnalyst.com\nhttps://www.alextheanalyst.com/\n\nDiscord Channel:\nhttps://discord.gg/rxZUjNvRzR\n\n1 on 1 Coaching/Support the Channel:\nhttps://www.patreon.com/AlexTheAnalyst\n\nTwitter:\n@Alex_TheAnalyst\n\nSend Me Something:\n431 Saint James Avenue Suite L #318, Goose Creek, SC, 29445\n",
+                "customUrl": "@alextheanalyst",
+                "publishedAt": "2020-01-08T05:04:24.970712Z",
+                "thumbnails": {
+                    "default": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu9iyZu10NYIbwWmmYU2MJw5uifKxocE9AjDed9W=s88-c-k-c0x00ffffff-no-rj",
+                        "width": 88,
+                        "height": 88,
+                    },
+                    "medium": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu9iyZu10NYIbwWmmYU2MJw5uifKxocE9AjDed9W=s240-c-k-c0x00ffffff-no-rj",
+                        "width": 240,
+                        "height": 240,
+                    },
+                    "high": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu9iyZu10NYIbwWmmYU2MJw5uifKxocE9AjDed9W=s800-c-k-c0x00ffffff-no-rj",
+                        "width": 800,
+                        "height": 800,
+                    },
+                },
+                "localized": {
+                    "title": "Alex The Analyst",
+                    "description": "My name is Alex Freberg and on this channel I will be going over everything you need to know to become a Data Analyst. If you are wanting to make a career change or learn the skills needed to become a Data Analyst, be sure to subscribe to stay up to date on all my latest content.\n\nYou can find me on LinkedIn at:\nhttps://www.linkedin.com/in/alex-freberg/\n\nAlexTheAnalyst.com\nhttps://www.alextheanalyst.com/\n\nDiscord Channel:\nhttps://discord.gg/rxZUjNvRzR\n\n1 on 1 Coaching/Support the Channel:\nhttps://www.patreon.com/AlexTheAnalyst\n\nTwitter:\n@Alex_TheAnalyst\n\nSend Me Something:\n431 Saint James Avenue Suite L #318, Goose Creek, SC, 29445\n",
+                },
+                "country": "US",
+            },
+            "contentDetails": {
+                "relatedPlaylists": {"likes": "", "uploads": "UU7cs8q-gJRlGwj4A8OmCmXg"}
+            },
+            "statistics": {
+                "viewCount": "10672707",
+                "subscriberCount": "268000",
+                "hiddenSubscriberCount": False,
+                "videoCount": "160",
+            },
+        },
+        {
+            "kind": "youtube#channel",
+            "etag": "1ukTsFMynhrJOqqHblsPKN9kbDk",
+            "id": "UC2UXDak6o7rBm23k3Vv5dww",
+            "snippet": {
+                "title": "Tina Huang",
+                "description": "Hi! My name is Tina and I'm a data scientist at a FAANG company. \n\nThis channel is about data science, learning, and productivity. I love learning new things and my goal is to always minimize effort and maximize outcome! \n\nI strive to do things the most efficient way possible and with the highest reward. I basically refuse to do extra work to achieve my goals c: \n\n----------------------------------------------------------------------------------------------------------------------------------------------------\nA little about myself:\n\nI did my undergraduate at the University of Toronto where I studied pharmacology. I was pre-med but decided I would be a terrible doctor 😱. I worked in bioinformatics for a year and then did my masters in computer science (MCIT) at the University of Pennsylvania. \n\nI interned at Goldman Sachs, then got my current data science job in tech. \n\nTalk soon! \nTina",
+                "customUrl": "tinahuang1",
+                "publishedAt": "2013-08-28T18:05:17Z",
+                "thumbnails": {
+                    "default": {
+                        "url": "https://yt3.ggpht.com/QMaMXCtmRUXUuIWb6sUMLi_ulWNCxPuVnu3I-3IkT1YCJs6XzcxKoOFrzx_WjVW65S46S_pTRQ=s88-c-k-c0x00ffffff-no-rj",
+                        "width": 88,
+                        "height": 88,
+                    },
+                    "medium": {
+                        "url": "https://yt3.ggpht.com/QMaMXCtmRUXUuIWb6sUMLi_ulWNCxPuVnu3I-3IkT1YCJs6XzcxKoOFrzx_WjVW65S46S_pTRQ=s240-c-k-c0x00ffffff-no-rj",
+                        "width": 240,
+                        "height": 240,
+                    },
+                    "high": {
+                        "url": "https://yt3.ggpht.com/QMaMXCtmRUXUuIWb6sUMLi_ulWNCxPuVnu3I-3IkT1YCJs6XzcxKoOFrzx_WjVW65S46S_pTRQ=s800-c-k-c0x00ffffff-no-rj",
+                        "width": 800,
+                        "height": 800,
+                    },
+                },
+                "localized": {
+                    "title": "Tina Huang",
+                    "description": "Hi! My name is Tina and I'm a data scientist at a FAANG company. \n\nThis channel is about data science, learning, and productivity. I love learning new things and my goal is to always minimize effort and maximize outcome! \n\nI strive to do things the most efficient way possible and with the highest reward. I basically refuse to do extra work to achieve my goals c: \n\n----------------------------------------------------------------------------------------------------------------------------------------------------\nA little about myself:\n\nI did my undergraduate at the University of Toronto where I studied pharmacology. I was pre-med but decided I would be a terrible doctor 😱. I worked in bioinformatics for a year and then did my masters in computer science (MCIT) at the University of Pennsylvania. \n\nI interned at Goldman Sachs, then got my current data science job in tech. \n\nTalk soon! \nTina",
+                },
+                "country": "US",
+            },
+            "contentDetails": {
+                "relatedPlaylists": {"likes": "", "uploads": "UU2UXDak6o7rBm23k3Vv5dww"}
+            },
+            "statistics": {
+                "viewCount": "15158422",
+                "subscriberCount": "387000",
+                "hiddenSubscriberCount": False,
+                "videoCount": "106",
+            },
+        },
+        {
+            "kind": "youtube#channel",
+            "etag": "V5VtgGIz7t_HWgGjRfVJcL8pXa0",
+            "id": "UCiT9RITQ9PW6BhXK0y2jaeg",
+            "snippet": {
+                "title": "Ken Jee",
+                "description": "Data Science and Sports Analytics are my passions. My name is Ken Jee and I have been working in the data science field doing sports analytics for the last 5 years. I have held data science positions in companies ranging from startups to fortune 100 organizations.  I transitioned into data science from a business and consulting background. When I was first starting out on my data science journey I was extremely lost; there were very few resources for me to learn about this field from. I decided to start making YouTube videos to share my experiences and to hopefully help others get break into the data science and sports analytics fields. \n\nOn this channel I produce fun and informative Data Science and Sports Analytics Content. My goal is to provide insight into the data science community, career advice, and sports related analysis.\n\n",
+                "customUrl": "@kenjee1",
+                "publishedAt": "2014-02-28T14:58:24Z",
+                "thumbnails": {
+                    "default": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu-gvNMCqNLnYDrF2a3kwHe7cSfmcA_9guf13AHGBg=s88-c-k-c0x00ffffff-no-rj",
+                        "width": 88,
+                        "height": 88,
+                    },
+                    "medium": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu-gvNMCqNLnYDrF2a3kwHe7cSfmcA_9guf13AHGBg=s240-c-k-c0x00ffffff-no-rj",
+                        "width": 240,
+                        "height": 240,
+                    },
+                    "high": {
+                        "url": "https://yt3.ggpht.com/ytc/AMLnZu-gvNMCqNLnYDrF2a3kwHe7cSfmcA_9guf13AHGBg=s800-c-k-c0x00ffffff-no-rj",
+                        "width": 800,
+                        "height": 800,
+                    },
+                },
+                "localized": {
+                    "title": "Ken Jee",
+                    "description": "Data Science and Sports Analytics are my passions. My name is Ken Jee and I have been working in the data science field doing sports analytics for the last 5 years. I have held data science positions in companies ranging from startups to fortune 100 organizations.  I transitioned into data science from a business and consulting background. When I was first starting out on my data science journey I was extremely lost; there were very few resources for me to learn about this field from. I decided to start making YouTube videos to share my experiences and to hopefully help others get break into the data science and sports analytics fields. \n\nOn this channel I produce fun and informative Data Science and Sports Analytics Content. My goal is to provide insight into the data science community, career advice, and sports related analysis.\n\n",
+                },
+                "country": "US",
+            },
+            "contentDetails": {
+                "relatedPlaylists": {"likes": "", "uploads": "UUiT9RITQ9PW6BhXK0y2jaeg"}
+            },
+            "statistics": {
+                "viewCount": "6800036",
+                "subscriberCount": "214000",
+                "hiddenSubscriberCount": False,
+                "videoCount": "237",
+            },
+        },
+    ],
+}
