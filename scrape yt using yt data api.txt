@@ -14,10 +14,7 @@ Zatim cemo te podatke ucitati u pandas DF, analizirati ih i napraviti neke vizua
 https://console.cloud.google.com/apis/dashboard?pli=1&project=roki-1560496923580
 
 Preduslov je da imamo kreiran Google Account.
-Moj je:
 
-Username = roljingstones@yandex.com
-Password = Dashano2012*
 
 Idemo na Create Project: Desno od Google Cloud pise moj username, kliknem na to i otvoti mi se prozor u kojem imam opciju da kreiram novi projekat.
 Imenujem projekt: Roki YT Analysis Project  (Project ID: roki-yt-analysis-project)
@@ -27,7 +24,7 @@ Skrolujemo dolje dok ne pronadjemo YouTube Data API v3, kliknemo na to.
 Klik na Enable da ga omogucimo.
 Sad treba da kreiramo kljuc. Idemo na Credentials: Onda idemo gore na CREATE CREDENTIALS, onda klik na API key.
 Izadje prozor u kojem je zapisan kljuc, kopiram ga>
-AIzaSyD-3rsz-vXjiD4-7swTjivx198ItGD1MK0
+
 
 
 
@@ -193,7 +190,7 @@ ali mislim da je to ok.
 --Izdvajanje detalja o kanalima:
 Prvo nam treba varijabla u kojoj cemo sacuvati nas API kljuc:
 
-api_key = 'AIzaSyD-3rsz-vXjiD4-7swTjivx198ItGD1MK0'
+api_key = 'api key ide ovdje'
 
 --Zatim cemo pristupiti odredjenom kanalu da vidimo kako se to radi:
 Kako doci do YT ID nekog kanala?
