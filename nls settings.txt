@@ -1,0 +1,10 @@
+NLS settings:
+
+Date format: DD-MON-RR
+Timestamp format: DD-MON-RR HH.MI.SSXFF AM
+Timestamp TZ format: DD-MON-RR HH.MI.SSXFF AM TZR
+
+
+Novi setting:
+Date format: DD.MM.YYYY
+Timestamp format: DD.MM.YYYY HH24:MI:SS
