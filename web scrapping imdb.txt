@@ -1,0 +1,384 @@
+Web Scraping in Python using Beautiful Soup | Writing a Python program to Scrape IMDB website
+https://www.youtube.com/watch?v=LCVSmkyB4v8
+
+Web crapping - skidanje sadrzaja neke web stranice koristenjem programiranja
+
+- Koristicemo Python preko VS Codea, pristupiti Web stranici IMDB (Top 250 filmova rangirano prema IMDB ratingu)
+dovuci te podatke preko Pythona koristeci biblioteku Beautiful Soup. Kao rezultat dobicemo excel fajl sa podacima sa tog sajta.
+
+Sajt je> https://www.imdb.com/chart/top/
+
+
+Predradnje>
+1. Instalisan VS Code i za njega instalisana Python ekstenzija
+- To imam vec instalisano
+
+
+-- (1:10) Teufik objasnjava osnove HTML-a
+-- (2:04) krece sa instalacijom dva modula u VS Codeu --ovo ja preskacem jer sam nasao nacin kako da unutar venv okoline instaliram ove module
+-- ovaj sad dio koji ide je moj, kod Teufika ide odmah kucanje koda>
+
+2. Mora biti omoguceno izvrsavanje skripti unutar VS Codea>
+
+Da bih mogao izvrsavati skripte u VS Codeu moram ukloniti prepreke (posto mi je javljao error kod izvrsavanja importa biblioteka):
+Zato je potrebno u PowerShellu:
+Visual studio code cmd error: Cannot be loaded because running scripts is disabled on this system
+https://stackoverflow.com/questions/56199111/visual-studio-code-cmd-error-cannot-be-loaded-because-running-scripts-is-disabl
+
+Steps to resolve the issue,
+
+Open PowerShell in your Computer (This will change the PowerShell execution policy on your Windows Computer)
+Run ( To get-ExecutionPolicy for your Machine )
+Get-ExecutionPolicy -List
+
+Run
+Set-ExecutionPolicy -Scope CurrentUser Unrestricted
+
+
+3. Na Desktopu racunara sam kreirao folder Project. 
+Putanje do ovog foldera je> C:\Users\sinisa.roljic\Desktop\Project
+U VS Codeu idemo na File, Open new folder, pronadjemo taj folder i u tom folderu kreiramo novu virtuelnu okolinu:
+Idem na Terminal, New Terminal. Otvara se terminalski prozor u VS Codeu pod folderom Project.
+Tu kucam sljedece:
+
+python -m venv C:\Users\sinisa.roljic\Desktop\Project\venv
+
+Kad sljedeci put otvorim terminal, on se otvara u toj novoj venv okolini.
+Tu sad instaliram biblioteke.
+
+4. Unutar VS Codea instalisane Python biblioteke> requests i bs4
+Sad se mogu iz VS Codea instalisati potrebne biblioteke (sto mi je bio cilj):
+Otvorin u novoj okolini New Terminal i tamo kucam:
+Prvo instalisem requests koji nam sluzi da pristupimo web stranici>
+
+pip install requests
+
+kad se to instalise onda dalje instalisemo BeautifulSoup koja nam sluzi da parsiramo HTML sa tog sajta>
+
+pip install bs4
+
+Uspjesno se instalisu obje biblioteke.
+
+Cilj:
+Preko Python biblioteke BeautifulSoup izvrsiti tzv. Web Scrapping sa IMDB stranice Top 250 filmova po ocjenama pretplatnika.
+Link na taj sajt:
+https://www.imdb.com/chart/top/
+
+Potrebno je pokupiti podatke o rednom broju na listi, imenu filma, godini kad je film izasao i IMDB ocjeni filma.
+
+----------
+--sad dalje radim po Teufiku:
+
+Sad dalje pratim video>
+
+
+- U VS Codeu kreira novi py fajl> Ja sam ga nazvao webscrap.py
+- Kucanje koda>
+   --(3:20)Prvo importuje module
+   
+   from bs4 import BeautifulSoup
+   import requests
+   
+   
+   --(3:33) Ide na pomenuti IMDB sajt i objasnjava sta ce pokupiti
+   --(4:29) Koristenje request modula da pristupi web stranici:
+   
+   source = requests.get('https://www.imdb.com/chart/top/')
+   
+   ovo ce kreirati response object koji ce se sacuvati u varijabli surce. Izmedju ostalog u toj varijabli bice HTML kod sa gornje stranice.
+   
+   
+   --(4:59) Inspekcija html koda na IMDB Top 250 stranici kako bi se skontala struktura html-a:
+   desni klik na stranici --> Inspect, vidimo source kod HTML stranice kojeg zelimo ekstraktovati preko request modula.
+   
+   --(5:25) Objasnjenje zasto je pametno sve staviti unutar try-exceptt bloka, raise_for_status() metoda:
+   Npr. ako u request.get gore stavimo nepostojecu web stranicu i pokrenemo kod nista se nece desiti, necemo skontati da ta stranica ne postoji.
+   raise_for_status() metoda, javice gresku ako ima nekih problema sa web stranicom
+   sad kad se pokrene kod daje error => kad god koristimo requests.get() uvijek treba koristiti i raise_for_status()
+   E da se kod greske ne bi skrsio cijeli program stavlja sve u try-except blok.
+   Dio koda:
+   
+   try:
+       source = requests.get('https://www.imdb.com/chart/top/')
+       source.raise_for_status()
+   except Exception as e:
+       print(e)
+       
+       
+    --(7:15) ekstrakcija HTML koda iz source objekta i predavanje tog teksta ka BS:
+   
+      soup = BeautifulSoup(source.text,'html.parser')
+      
+      Iz response objekta source uzima text, parsira ga preko parsera html.parser i cuva ga kao BS objekat u varijabli soup.
+      
+      testira sa print  da vidi da li radi
+   
+   
+   --(8:52) Objasnjava na IMDB stranici kako ce ekstraktovati naslove filmova:
+      Ide na web stranicu i na prvom linku filma desni klik pa na Inspect --> otvara se html kod
+      Svi podaci u html-u su untar tagova.
+      Sve kod nas na ovom sajtu je unutar tbody taga:
+      <tbody class = "lister-list">
+           <tr>...</tr>
+           <tr>...</tr>
+           ...
+      </tbody>
+      
+      Unutar svakog od tr tagova nalazi se nekoliko td tagova:
+      
+      <tr>
+          ...
+          <td class ="titleColumn">...</td>
+          <td class ="ratingColumn imdbRating">...</td>
+          ...
+      </tr>
+      Svaki <tr> tag predstavlja po jedan film.
+      Unutar svakog <td> taga:
+      
+      <td class = "titleColumn">
+         rank filma
+         <a href = "....."
+            title="..."> naslov filma</a>
+         <span class = "secondaryInfo">godina filma</span>
+       </td>
+       
+       <td class = "ratingColumn imdbRating">
+           <strong title = "...">imdb rating filma</strong>
+       </td>   
+
+  --(11:28) sad zelimo da pokupimo naziv filma:
+     Naslov je pod tagom <a> koji ima nekoliko atributa: href atribut, pa title atribut. I ima tekst koji je direktno pod tagom <a>
+     tu je naslov filma.
+     Znaci potrebno je napisati kod koji ce doprijeti do taga <a> i u njemu do teksta tog taga.
+     Tag <a> je unutar taga <td>, a tag <td> je unutar <tr> taga.
+     Prvo pristupamo <tbody> tagu i unutar njega <tr> tagu.
+     
+     movies = soup.find('tbody',class_="lister-list")
+     
+     Metoda find() ce pronaci prvo matchovanje <tbody> taga i to klase lister-list.
+     Napomena: Posto je class rezervisana rijec u Pythonu za pristup ovoj klasi se koristi class_
+     Testira sa :
+     print(movies)
+     Posto zelimo da pristupimo svim <tr> tagovima koristicemo metodu find_all():
+     
+     movies = soup.find('tbody',class_="lister-list").find_all('tr')
+     
+     ovo ce vratiti listu sa 250 filmova.
+     To cemo potvrditi ako kazemo:
+     print(len(movies))
+ -- (19:15) sad iteriramo po svim <tr> tagovima:
+ 
+    for movie in movies:
+        print(movie)
+        break
+        
+    Ovo samo da vidi sta ce ispisati, prekoda nakon jednog prolaza.
+    Ovo ce ispisati cijeli html kod <tr> taga za prvi film.
+-- (20:33) sad zelim da pristupim <td> tagu unutar svakog od <tr> tagova:
+ Sad unutar petlje:
+      name = movie.find('td',class_="titleColumn")
+      
+      Provjera sa print(name), ispisuje cijeli prvi <td> tag.
+      ali mi hocemo samo ono sto nam je unutar taga <a> pa je:
+      
+      name = movie.find('td',class_="titleColumn").a
+      
+      Sad nama treba tekst taga <a>, jer se tu nalazi naslov filma:
+      
+      name = movie.find('td',class_="titleColumn").a.text  ##i to vraca komplet naslov filma
+      
+-- (22:58) Sad zelimo da pokupimo rank filma:
+           To se nalazi unutar:
+           
+           <td class = "titleColumn">
+           
+           Nama treba text taga <td>:
+           
+      rank = movie.find('td',class_="titleColumn").text
+      
+      Sa print(rank) testira, ali se dobije komplet text i sa rankom i sa naslovom filma.
+      Medjutim, sad kad hoce da provjeri printa mu i rank i naziv filma te godinu
+      To je zato sto sa text poziva sav text unutar tog taga (dakle, i tekstove iz drugih podtagova unutar tog taga).
+      Zato koristimo drugu metodu: get_text() i to sa strip parametrom kako bismo uklonili sve dodatne karaktere tipa new line, tab i sl.
+      
+      rank = movie.find('td',class_="titleColumn").get_text(strip = True)
+      Dobije se:
+      rnk.naziv filma(godina)
+      Sad je dobio sve kao jedan tekst. I rank i naziv filma i godinu, ali nama treba samo rank.
+      Zato ce splitovati ovaj tekst na bazi tacke.
+      rank = movie.find('td',class_="titleColumn").get_text(strip = True).split('.')
+      
+      tako ce dobiti listu:
+      ['rnk','naziv filma(godina)']
+      Sad samo treba pokupiti index 0 iz ove liste:
+      rank = movie.find('td',class_="titleColumn").get_text(strip = True).split('.')[0]
+      
+      Sad kad pokrenemo, vraca rank filma kako smo i htjeli.
+      
+--(26:58) Sad zelimo da pokupimo godinu filma:
+     Kad se sa Inspect na IMDB stranici pogleda dje se nalazi taj podatak vidimo da se on nalazi u dijelu:
+     ...
+     <span class = "secondaryInfo">godina filma</span>
+     ...
+     kao text toga taga, u okviru <td> taga:
+     year = movie.find('td',class_="titleColumn").span.text
+     testiramo sa print(year)
+     Kad se pokrene ispisace:
+     (godina)
+     Sad se samo treba rijesiti zagrada:
+     year = movie.find('td',class_="titleColumn").span.text.strip('()')
+     I kad se to pokrene dobije se godina bez zagrada.
+     Tako smo dobili i godinu.
+     
+--(28:29) Sad nam treba jos IMDB rating:
+    Sa Inspect vidimo da se to nalazi u dijelu koda:
+    <td class = "ratingColumn imdbRating">
+           <strong title = "...">imdb rating filma</strong>
+    </td>
+    To znaci da mu pristupamo sa:
+    rating = movie.find('td',class_="ratingColumn imdbRating")
+    Sa print(rating) testiramo:
+    <td class="ratingColumn imdbRating">
+       <strong title="9.2 based on 2,630,070 user ratings">9.2</strong>
+    </td>
+    Znaci da samo jos treba pristupiti textu od taga <strong>:
+    rating = movie.find('td',class_="ratingColumn imdbRating").strong.text
+    
+    i dobijamo rating filma.
+ 
+--(30:40) Sad radi testa printamo sve cetiri pokupljene vrijednosti za prvi film:
+       print(rank, name, year,rating)
+       I zaista:
+       1 The Shawshank Redemption 1994 9.2
+  -- Sad skida break da vidimo kako radi za komplet listu
+  I zaista, ispisuje sve podatke za svih 250 filmova.
+  
+--(31:26) Sad zelimo da sve ove podatke ucitamo u excel fajl:
+   Prvo moramo importovati modul: openpyxl
+   import openpyxl
+   
+   (ako nije instalisan prethodno ga u novom terminal prozoru treba instalisati: pip install openpyxl)
+    Zakomentarisacemo sa doc stringom cijeli ostali kod da bismo vidjeli kako cemo raditi sa excelom:
+    '''
+    ..kod
+    '''
+   Sad kreiramo novi excel:
+   excel = openpyxl.Workbook()
+   
+   Da vidimo koji sheetovi su u tom novokreiranom excelu:
+   
+   print(excel.sheetnames)
+   
+   Kad pokrenemo:
+   Ispise samo:
+   ['Sheet']
+   
+   to je difoltni sheet excela.
+   Sad cemo osigurati da radimo na aktivnom sheetu excela:
+   sheet = excel.active
+   
+   Sad mijenjamo naziv tog aktivnog sheeta:
+   sheet.title = 'Top Rated Movies'
+   Sad kad ponovo otprinatamo ime sheeta:
+   print(excel.sheetnames)
+   Ispisuje:
+   ['Top Rated Movies']
+   
+   -- Sad definisemo da je prvi red u stvari naziv kolona, a to su nam u stvari rank, name, year i imdb rating:
+   sheet.append(['Movie Rank', 'Movie Name', 'Year of Release', 'IMDB Rating'])
+   
+   -- Sad zelimo da pri svakom prolasku kroz petlju doda se po jedan red u excel:
+   U petlji kucamo:
+   sheet.append([rank, name, year, rating])
+   
+   --Sad jos samo moramo snimiti excel:
+   excel.save('IMDB Movie Ratings.xlsx')
+   
+   To je to. Sad samo zakomentarisemo printove koje smo dodavali kao test u kodu.
+   Pokrenemo kod i vidimo lijevo u VS Codeu da se kreirao fajl: IMDB Movie Ratings.xlsx
+   
+   Mozemo otvoriti iz foldera Projects taj fajl i pogledati ga.
+   
+   Kompletan Python kod je u fajlu:
+   
+   webscrap.py
+   
+   na lokaciji:
+   C:\Users\sinisa.roljic\Desktop\Project\venv
+
+Time je ovaj dio zadatka zavrsen.
+----------------------------------------------------------------------
+
+-- Sad ovaj excel treba uvuci u Tableau i onda napraviti nekoliko vizualizacija i dashboard:
+
+1. Tabelarni prikaz
+2. Prikaz preko bar grafa
+3. Histogram - broj filmova na listi po dekadama
+4. Dashboard
+
+1. Tabelarni prikaz
+-------------------------
+- Prvo sam excel uvukao u Tableau Public (dovukao sam najnoviju verziju 2022.2)
+- U Data sourceu: Tableau je prepoznao Rank da je tekst, promijenicu da bude cijeli broj. Godinu cu ostaviti da bude tekst.
+a IMDB rating cu promijeniti da bude decimalan broj.
+-- Idem na Sheet1:
+- Movie rank konvertujem u dimenziju i postavim u redove, dodam u redove i Movie Name, pa Year of Release.
+Zatim IMDB rating takodje konvertujem u dimenziju i to isto stavim u redove.
+Dobije se Tableau text tabela, ali se dobije i suvisna dodatna colona Abc.
+Kako je se rijesiti?
+Nasao sam fino rjesenje na yt u videu:
+How to remove Remove 'Abc' column in Tableau?
+https://www.youtube.com/watch?v=56Y5oa7x0MM
+Koraci:
+-- Kreiram novo kalkulaciono polje, nek se zove Blank
+U definiciji kalk polja samo napisem: " "
+--Novokreirano kalk polje samo prevucemo u Markse u Text
+Ovim je nestalo Abc ali i dalje postoji ekstra kolona.
+Kako se nje rijesiti?
+How to Tableau: Remove 'Abc' From a Worksheet
+https://www.youtube.com/watch?v=Toshw00eUNY
+
+- Odem na neku celiju u ovoj koloni , desni klik pa na Format, u Format prozoru klik na Borders ikonu:
+Idemo na Column Divider, klik na Pane (klik na strelicu pored Pane):
+Otvara se prozorcic, kliknemo gore na None i tako se u stvari mergeuje pretposljednja sa posljednjom blank kolonom na Sheetu.
+Sad samo suzimo tu kolonu rucno na Sheetu.
+
+Reimenujem naziv tabele i sheeta.
+
+2. Prikaz preko bar grafa
+--------------------------
+- IMDB rating prebacim u redove, promijenim da nije dimenzija vec mjera i izaberem da je agregacija AVG
+- Movie name stavljam u kolone (trebalo bi po automatizmu da se prikaze bar graf)
+- Sortiram po opadajucem redoslijedu
+- Stavljam IMDB rating u Markse u Label
+Medjutim, tu sad ima previse filmova.
+Uzecu samo Top 10.
+Kako napraviti prikaz za samo Top n filmova?
+- Prebacim Movie name u Filter polje, otvara se definicija filtra i bira se opcija Top:
+Tu je vec po difoltu da se bira top 10 po IMDB ratingu i samo kazem ok --> pojavljuje se samo prvih 10 filmova.
+
+3. Histogram - broj filmova na listi po dekadama
+---------------------------------------------------
+Ako prebacim Year of Release na panel vidi se da je najraniji film iz 1921., a najnoviji film je iz 2022.
+Sad treba napraviti binove po dekadama:
+1.dek: 1920 - 1929
+2.dek: 1930 - 1939
+...
+Kreiram grupe od godina --> Klik na strelicu pored Year of Release Create --> Groups. Onda samo oznacim sve godine koje zelim da mi budu
+u istoj grupi i kazem Group te imenujem grupu, 1920te, 1930te...itd
+Tako sam napravio grupu: Year of Release(group)
+- Sad tu novokreiranu gupu prebacim  u kolone, a Movie name prebacim u redove. Promijenim Movie name da mi je mjera i da je agg f-ja Count.
+
+4. Dashboard
+------------
+Otvaram sheet za novi dashboard:
+Biram za Size da je Automatic
+Poredao sam sheetove na dashboard i snimio dashboard na Tableau Public kao:
+DA Project 5: IMDB Movie ratings
+
+Link:
+https://public.tableau.com/app/profile/roljingstones2292/viz/DAProject5IMDBMovieratings/Dashboard?publish=yes
+
+
+
+
